@@ -35,6 +35,10 @@
 
 
             @else
+                @if($data->count())
+                    
+                    
+                
                 <div class="row">
                     <div class="col-12 services-box mb-5">
                         <div class="p-1 card shadow">
@@ -65,6 +69,7 @@
                     </div>
                     @endforeach
                 </div>
+                @endif
             @endif
 
         </div>

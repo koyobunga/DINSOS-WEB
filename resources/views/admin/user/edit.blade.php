@@ -33,7 +33,7 @@
                     <label for="floatingSelect">Level</label>
                     <select required name="level" required class="form-control @error('level') is-invalid @enderror" id="floatingSelect" aria-label="Floating label select example">
                       <option value="">Pilih</option>
-                      <option @if($data->level == 'aset') selected @endif value="aset">Aset</option>
+                      <option @if($data->level == 'bidang') selected @endif value="bidang">Bidang</option>
                       <option @if($data->level == 'admin') selected @endif value="admin">Admin</option>
                     </select>
                     @error('level')

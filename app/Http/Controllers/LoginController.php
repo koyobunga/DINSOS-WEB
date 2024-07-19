@@ -11,8 +11,8 @@ class LoginController extends Controller
         if(Auth::user()){
             if(Auth::user()->level == 'admin')
                 return redirect('admin');
-            if(Auth::user()->level == 'aset')
-                return redirect('aset');
+            if(Auth::user()->level == 'bidang')
+                return redirect('bidang');
         }
         return view('login');
     }
@@ -31,8 +31,8 @@ class LoginController extends Controller
             if(Auth::user()->level == 'admin'){
                 return redirect('admin')->with('success', 'Login berhasil');
             }
-            if(Auth::user()->level == 'aset'){
-                return redirect('aset')->with('success', 'Login berhasil');
+            if(Auth::user()->level == 'bidang'){
+                return redirect('bidang')->with('success', 'Login berhasil');
             }
         }
         return back()->with('error', 'Gagal login');

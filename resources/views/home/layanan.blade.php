@@ -30,7 +30,7 @@
                             <div class="card-body ">
                                 <h5 class="card-title mb-0">{{$g->nama}}</h5>
                                 <div class="text-muted small mb-2">Posted,  {{ $g->created_at->format('d F Y')}}</div>
-                                <div class="card-text @if(!empty($g->ket)) mb-3 @endif">{{ $g->ket }} </div>
+                                <div class="card-text @if(!empty($g->ket)) mb-3 @endif">{!! $g->ket !!} </div>
 
                                     <a href="{{url('layanan?show='.$g->id)}}" class="btn btn-custom btn-sm waves-effect waves-light">Buka</a>
 

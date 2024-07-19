@@ -19,4 +19,9 @@ class Bidang extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    public function aset()
+    {
+        return $this->hasMany(Aset::class);
+    }
 }

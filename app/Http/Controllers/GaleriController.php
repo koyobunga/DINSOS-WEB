@@ -7,6 +7,7 @@ use App\Http\Requests\StoreGaleriRequest;
 use App\Http\Requests\UpdateGaleriRequest;
 use App\Models\Galeri_det;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class GaleriController extends Controller
 {
@@ -42,6 +43,7 @@ class GaleriController extends Controller
             'label' => 'required',
             'ket' => 'nullable',
         ]);
+        $valid['user_id'] = Auth::user()->id;
         if(Galeri::create($valid))
             return back()->with('success', 'Berhasil menambahkan');
         return back()->with('error', 'Gagal menambahkan');

@@ -1,20 +1,30 @@
 <?php
 
+use App\Http\Controllers\_BeritaController;
+use App\Http\Controllers\_GaleriController;
+use App\Http\Controllers\_GaleriDetController;
+use App\Http\Controllers\Admin2Controller;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AplikasiController;
+use App\Http\Controllers\AsetController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\BidangController;
 use App\Http\Controllers\FaqController;
 use App\Http\Controllers\GaleriController;
 use App\Http\Controllers\GaleriDetController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\KuesionerController;
 use App\Http\Controllers\LandingController;
 use App\Http\Controllers\LayananController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PesanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublikasiController;
 use App\Http\Controllers\PublikasiDetController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\Admin;
+use App\Http\Middleware\Aset;
+use App\Http\Middleware\Bidang;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [LandingController::class, 'index']);
@@ -31,8 +41,17 @@ Route::get('kontak', [LandingController::class, 'kontak']);
 Route::get('berita', [LandingController::class, 'berita']);
 Route::get('berita/{berita:slug}', [LandingController::class, 'berita_show']);
 
+Route::get('kuesioner', [LandingController::class, 'kuesioner']);
+Route::post('kuesioner/post', [KuesionerController::class, 'store']);
+Route::post('kuesioner/sukse', [KuesionerController::class, 'sukses']);
+
+Route::get('kuesioner/ikm', [KuesionerController::class, 'ikm_load']);
+
+
+
 Route::middleware(Admin::class)->group(function(){
     Route::get('admin', [AdminController::class, 'index']);
+
     Route::get('admin/signout', [LoginController::class, 'signout']);
     Route::resource('admin/layanans', LayananController::class);
     Route::resource('admin/galeris', GaleriController::class);
@@ -52,8 +71,25 @@ Route::middleware(Admin::class)->group(function(){
 
     Route::resource('admin/profiles', ProfileController::class);
     Route::resource('admin/faqs', FaqController::class);
+    
+    Route::resource('admin/pesans', PesanController::class);
+    
 
     Route::resource('admin/bidangs', BidangController::class);
     Route::post('admin/bidangs/editnama', [BidangController::class, 'update']);
 
+});
+
+Route::middleware(Bidang::class)->group(function(){
+    Route::get('bidang/signout', [LoginController::class, 'signout']);
+    Route::get('bidang', [Admin2Controller::class, 'index']);
+    Route::resource('bidang/galeris', _GaleriController::class);
+    Route::resource('bidang/galeri_dets', _GaleriDetController::class);
+    Route::post('bidang/galeri/editlabel', [_GaleriController::class, 'update']);
+    Route::get('bidang/galeri_det/{galeri}', [_GaleriDetController::class, 'index']);
+
+    Route::resource('bidang/beritas', _BeritaController::class);
+    Route::resource('bidang/asets', AsetController::class);
+    Route::resource('bidang/items', ItemController::class);
+    Route::get('bidang/aset/print', [Admin2Controller::class, 'print']);
 });

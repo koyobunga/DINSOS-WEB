@@ -6,6 +6,8 @@ use App\Models\Pesan;
 use App\Http\Requests\StorePesanRequest;
 use App\Http\Requests\UpdatePesanRequest;
 
+use function PHPUnit\Framework\returnSelf;
+
 class PesanController extends Controller
 {
     /**
@@ -13,7 +15,11 @@ class PesanController extends Controller
      */
     public function index()
     {
-        //
+        Pesan::where('status', 0)->update(['status'=>1]);
+        return view('admin.pesan.index', [
+            'title' => 'Pesan',
+            'data' => Pesan::orderbydesc('id')->get(),
+        ]);
     }
 
     /**
@@ -61,6 +67,8 @@ class PesanController extends Controller
      */
     public function destroy(Pesan $pesan)
     {
-        //
+        if(Pesan::destroy($pesan->id))
+            return back()->with('error', 'Pesan telah dihapus');
+        return back()->with('error', 'Gagal menghapus pesan');
     }
 }

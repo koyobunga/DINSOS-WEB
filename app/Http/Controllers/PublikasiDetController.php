@@ -13,6 +13,7 @@ class PublikasiDetController extends Controller
      */
     public function index(Publikasi $publikasi)
     {
+        
         return view('admin.publikasi.dok_detail',[
             'title' => 'Upload Dokumen Publik',
             'publikasi' => $publikasi,

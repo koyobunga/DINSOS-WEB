@@ -3,7 +3,7 @@
     <div class="page-description">
         <div class="d-flex mb-4">
             <div class="fw-bold h4">{{ $title }}</div>
-            <a href="{{ route('beritas.create')}}" class="btn btn-primary ml-auto">Tambah data</a>
+            <a href="{{ url('admin/beritas/create')}}" class="btn btn-primary ml-auto">Tambah data</a>
         </div>
 
         <div class="card">
@@ -19,8 +19,8 @@
                     <tbody>
                         @foreach ($berita as $b)
                             <tr>
-                                <td class="product-list-img">
-                                    <img src="{{url('img/berita/'.$b->image)}}" class="img-fluid avatar-md rounded" alt="tbl">
+                                <td class="product-list-img" style="width:80px ">
+                                    <img src="{{url('img/berita/'.$b->image)}}" class="img-fluid avatar-md rounded"  alt="tbl">
                                 </td>
                                 <td>
                                     <h6 class="mt-0 mb-1">{{ $b->label }}</h6>

@@ -1,3 +1,8 @@
+@php
+    use App\Models\Pesan;
+    $pm = Pesan::where('status', 0)->get();
+@endphp
+
 <!doctype html>
 <html lang="en">
 
@@ -92,17 +97,20 @@
                         <div class="dropdown d-inline-block mr-3 pr-4">
                             <button type="button" class="btn header-item noti-icon pr-5 waves-effect" id="page-header-notifications-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="ion ion-md-notifications"></i>
-                                <span class="badge badge-danger badge-pill">3</span>
+                                @if($pm->count())
+                                <span class="badge badge-danger badge-pill">{{ $pm->count() }}</span>
+                                @endif
                             </button>
                             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-0" aria-labelledby="page-header-notifications-dropdown">
                                 <div class="p-3">
                                     <div class="row align-items-center">
                                         <div class="col">
-                                            <h5 class="m-0 font-size-16"> Notification (3) </h5>
+                                            <h5 class="m-0 font-size-16"> Notification ({{ $pm->count() }}) </h5>
                                         </div>
                                     </div>
                                 </div>
                                 <div data-simplebar style="max-height: 230px;">
+                                    @foreach ($pm as $p)
                                     <a href="" class="text-reset notification-item">
                                         <div class="media">
                                             <div class="avatar-xs mr-3">
@@ -111,20 +119,22 @@
                                                 </span>
                                             </div>
                                             <div class="media-body">
-                                                <h6 class="mt-0 font-size-15 mb-1">Your order is placed</h6>
+                                                <h6 class="mt-0 font-size-15 mb-1">{{ $p->nama }}</h6>
                                                 <div class="font-size-12 text-muted">
-                                                    <p class="mb-1">Dummy text of the printing and typesetting industry.</p>
+                                                    <p class="mb-1">{{ Str::limit($p->pesan, 30, '...') }}</p>
+                                                    <small>{{ $p->created_at->diffforhumans() }}</small>
                                                 </div>
                                             </div>
                                         </div>
                                     </a>
+                                    @endforeach
 
 
 
                                 </div>
                                 <div class="p-2 border-top">
-                                    <a class="btn btn-sm btn-link font-size-14 btn-block text-center" href="javascript:void(0)">
-                                        View all
+                                    <a class="btn btn-sm btn-link font-size-14 btn-block text-center" href="{{ url('admin/pesans') }}">
+                                        Lihat pesan
                                     </a>
                                 </div>
                             </div>
@@ -162,7 +172,7 @@
 
 
                             <li>
-                                <a href="javascript: void(0);" class="waves-effect">
+                                <a href="{{ url('admin') }}" class="waves-effect">
                                     <i class="mdi mdi-view-dashboard"></i>
                                     <span> Dashboard </span>
                                 </a>
@@ -239,6 +249,7 @@
                                 </a>
                             </li>
 
+                            <div class="mb-5">&nbsp;</div>
 
 
                         </ul>
@@ -304,8 +315,26 @@
         <script src="{{url('assets/admin/js/pages/alertify-init.js')}}"></script>
 
         <script src="{{ url('assets/js/jquery.dataTables.min.js') }}"></script>
+
+
+        <!-- Peity chart-->
+        <script src="{{ url('assets/admin/libs/peity/jquery.peity.min.js') }}"></script>
+
+        <!--C3 Chart-->
+        <script src="{{ url('assets/admin/libs/d3/d3.min.js') }}"></script>
+        <script src="{{ url('assets/admin/libs/c3/c3.min.js') }}"></script>
+
+        <script src="{{ url('assets/admin/libs/jquery-knob/jquery.knob.min.js') }}"></script> 
+
+        <script src="{{ url('assets/admin/js/pages/dashboard.init.js') }}"></script>
+
+        {{-- <script src="{{ url('assets/admin/js/app.js') }}"></script> --}}
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="{{url('assets/admin/js/app.js')}}"></script>
+
         <script>
         $(document).ready(function(){
+            $("#data").DataTable();
             $("#tabel_user").DataTable();
             $("#tabel_berita").DataTable();
             // $("#tabel_berita").DataTable({
@@ -313,10 +342,102 @@
             //     paging: false,
             //     order: false
             // });
-        })
-        </script>
 
-        <script src="{{url('assets/admin/js/app.js')}}"></script>
+            getData();
+                $('#tahun').change(function (e) { 
+                    e.preventDefault();
+                    getData();
+                });
+                
+                $('#triwulan').change(function (e) { 
+                    e.preventDefault();
+                    getData();
+                });
+
+        })
+   
+
+            let url = '{{ url('kuesioner/ikm') }}';
+            // alert(url);
+            let tahun = $('#tahun').val();
+            let triwulan = $('#triwulan').val();
+            const ctx = document.getElementById('myChart'); 
+
+            var chart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: [],
+                            datasets: [{
+                                data: [],
+                                borderWidth: 1,
+                                label: 'IKM',
+                            }]
+                        },
+                        options: {
+                        scales: {
+                            y: {
+                            beginAtZero: true
+                            }
+                        }
+                        }
+                    }); 
+            
+      
+                      
+
+           function getData(){
+            
+                tahun = $('#tahun').val();
+                triwulan = $('#triwulan').val();
+                $.ajax({
+                    type: "get",
+                    url: url,
+                    data: 'tahun='+tahun+'&triwulan='+triwulan,
+                    dataType: "json",
+                        success: function (response) {
+                            $('#responden').html('Total responden: '+response.data.responden+' &nbsp;&nbsp;&nbsp;&nbsp;Triwulan: '+response.data.triwulan+'&nbsp;&nbsp;&nbsp;&nbsp; Tahun: '+response.data.tahun);
+
+                            chart.clear();
+                            chart.data.labels = response.data.labels;
+                            chart.data.datasets[0].data = response.data.value;
+                            chart.update();
+
+                            let i = 0;
+                            var html = '';
+
+                            response.data.labels.forEach(element => {
+                                if(i==0){
+                                    html += '<tr>'
+                                        +'<td class="py-2">'+element+'</td>'
+                                        +'<td class="py-2" style="font-weight:500">'+response.data.value[i]+'</td>'
+                                        +'<td class="py-2" style="font-weight:500">'+response.data.kategori[i]+'</td>'
+                                        +'<td rowspan="9" class="text-center" style="vertical-align:middle; background: #d9eaf8; font-weight:500">'+response.data.unit+' %<br>('+response.data.huruf+' atau '+response.data.ket+')</td>'
+                                    +'</tr>';
+                                }else{
+                                    html +='<tr>'
+                                        +'<td class="py-2">'+element+'</td>'
+                                        +'<td class="py-2" style="font-weight:500">'+response.data.value[i]+'</td>'
+                                        +'<td class="py-2" style="font-weight:500">'+response.data.kategori[i]+'</td>'
+                                    +'</tr>';
+                                }
+
+                                i++;
+                            });
+
+                            $('#tbody').html(html);
+                            
+                        }
+                });
+           }
+
+
+            
+          </script>
+
+
+
+
+
 
         @if(session()->has('success'))
 		<script>

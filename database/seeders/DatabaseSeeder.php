@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Bidang;
 use App\Models\Faq;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -32,14 +33,18 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('admin3244'),
         ]);
         User::factory()->create([
-            'name' => 'Aset',
+            'name' => 'Admin Bidang',
             'email' => 'aset@example.com',
-            'username' => 'aset',
-            'level' => 'aset',
-            'password' => Hash::make('aset'),
+            'username' => '1',
+            'level' => 'bidang',
+            'bidang_id' => 1,
+            'password' => Hash::make('1'),
         ]);
         Faq::factory()->create([
             'ket' => '-',
+        ]);
+        Bidang::factory()->create([
+            'nama' => 'Bidang Aset',
         ]);
     }
 }

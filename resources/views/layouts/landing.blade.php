@@ -57,11 +57,16 @@
                             <a href="#layanans" class="nav-link">Layanan</a>
                         </li>
                         <li class="nav-item">
+                            <a href="#ikm" class="nav-link">IKM</a>
+                        </li>
+                        <li class="nav-item">
                             <a href="#kegiatans" class="nav-link">Kegiatan</a>
                         </li>
                         <li class="nav-item">
                             <a href="#beritas" class="nav-link">Berita</a>
                         </li>
+                        
+                       
 
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false">Publikasi</a>
@@ -105,6 +110,8 @@
 
         @yield('main')
 
+       
+
         <!--start footer-->
         <footer class="footer bg-dark">
             <div class="container">
@@ -112,11 +119,11 @@
                     <div class="col-12">
                         <div class="float-right pull-none">
                             <ul class="list-inline social">
-                                <li class="list-inline-item"><a href="#"><i class="mdi mdi-twitter"></i></a></li>
-                                <li class="list-inline-item"><a href=""><i class="mdi mdi-dribbble"></i></a></li>
-                                <li class="list-inline-item"><a href=""><i class="mdi mdi-linkedin"></i></a></li>
-                                <li class="list-inline-item"><a href=""><i class="mdi mdi-google"></i></a></li>
-                                <li class="list-inline-item"><a href=""><i class="mdi mdi-facebook"></i></a></li>
+                                {{-- <li class="list-inline-item"><a href="" target="_blank"><i class="mdi mdi-twitter"></i></a></li> --}}
+                                <li class="list-inline-item"><a href="https://www.instagram.com/dinsosprovgorontalo?igsh=OGNubnpvZ3g4djRh" target="_blank"><i class="mdi mdi-instagram"></i></a></li>
+                                {{-- <li class="list-inline-item"><a href=""><i class="mdi mdi-linkedin"></i></a></li> --}}
+                                {{-- <li class="list-inline-item"><a href=""><i class="mdi mdi-google"></i></a></li> --}}
+                                <li class="list-inline-item"><a href="https://web.facebook.com/dinas.s.gorontalo"><i class="mdi mdi-facebook"></i></a></li>
                             </ul>
                         </div>
                         <div class="pull-none">
@@ -139,6 +146,101 @@
         <!--common script for all pages-->
         <script src="{{url('assets/landing/js/jquery.app.js')}}"></script>
 
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+        <script>
+
+            let url = '{{ url('kuesioner/ikm') }}';
+            // alert(url);
+            let tahun = $('#tahun').val();
+            let triwulan = $('#triwulan').val();
+            const ctx = document.getElementById('myChart'); 
+
+            var chart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: [],
+                            datasets: [{
+                                data: [],
+                                borderWidth: 1,
+                                label: 'IKM',
+                            }]
+                        },
+                        options: {
+                        scales: {
+                            y: {
+                            beginAtZero: true
+                            }
+                        }
+                        }
+                    }); 
+            
+           $(document).ready(function () {
+                getData();
+                $('#tahun').change(function (e) { 
+                    e.preventDefault();
+                    getData();
+                });
+                
+                $('#triwulan').change(function (e) { 
+                    e.preventDefault();
+                    getData();
+                });
+
+                
+           });
+
+                      
+
+           function getData(){
+            
+                tahun = $('#tahun').val();
+                triwulan = $('#triwulan').val();
+                $.ajax({
+                    type: "get",
+                    url: url,
+                    data: 'tahun='+tahun+'&triwulan='+triwulan,
+                    dataType: "json",
+                        success: function (response) {
+                            $('#responden').html('Total responden: '+response.data.responden+' &nbsp;&nbsp;&nbsp;&nbsp;Triwulan: '+response.data.triwulan+'&nbsp;&nbsp;&nbsp;&nbsp; Tahun: '+response.data.tahun);
+
+                            chart.clear();
+                            chart.data.labels = response.data.labels;
+                            chart.data.datasets[0].data = response.data.value;
+                            chart.update();
+
+                            let i = 0;
+                            var html = '';
+
+                            response.data.labels.forEach(element => {
+                                if(i==0){
+                                    html += '<tr>'
+                                        +'<td class="py-2">'+element+'</td>'
+                                        +'<td class="py-2" style="font-weight:500">'+response.data.value[i]+'</td>'
+                                        +'<td class="py-2" style="font-weight:500">'+response.data.kategori[i]+'</td>'
+                                        +'<td rowspan="9" class="text-center" style="vertical-align:middle; background: #d9eaf8; font-weight:500">'+response.data.unit+' %<br>('+response.data.huruf+' atau '+response.data.ket+')</td>'
+                                    +'</tr>';
+                                }else{
+                                    html +='<tr>'
+                                        +'<td class="py-2">'+element+'</td>'
+                                        +'<td class="py-2" style="font-weight:500">'+response.data.value[i]+'</td>'
+                                        +'<td class="py-2" style="font-weight:500">'+response.data.kategori[i]+'</td>'
+                                    +'</tr>';
+                                }
+
+                                i++;
+                            });
+
+                            $('#tbody').html(html);
+                            
+                        }
+                });
+           }
+
+
+            
+          </script>
 
     </body>
 

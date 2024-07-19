@@ -38,11 +38,11 @@ class LayananController extends Controller
     {
         $valid = $request->validate([
             'nama' => 'required',
+            'nama' => 'nullable',
             'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
         $nama_image = time().'.'.$request->foto->extension();
         $valid['foto'] = $nama_image;
-        $valid['ket'] = $request->ket;
 
         $request->foto->move(public_path('img/layanan'), $nama_image);
 
@@ -77,6 +77,7 @@ class LayananController extends Controller
     {
         $valid = $request->validate([
             'nama' => 'required',
+            'ket' => 'nullable',
           
         ]);
 

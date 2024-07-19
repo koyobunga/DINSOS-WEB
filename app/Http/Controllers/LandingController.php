@@ -35,6 +35,20 @@ class LandingController extends Controller
         ]);
     }
 
+    public function kuesioner(){
+        $aplikasi = Aplikasi::all();
+        $galeri = Galeri::orderbydesc('id')->limit(6)->get();;
+        $publikasi = Publikasi::all();
+        $profile = Profile::all();  
+        return view('home.kuesioner', [
+            'title' => 'Kuesioner Survei',
+            'aplikasi' => $aplikasi,
+            'galeri' => $galeri,
+            'publikasi' => $publikasi,
+            'profile' => $profile,
+        ]);
+    }
+
     public function berita(Request $request){
         $aplikasi = Aplikasi::all();
         $publikasi = Publikasi::all();

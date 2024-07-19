@@ -38,7 +38,8 @@
         </section>
         <!--END HOME-->
 
-        <section class="section" id="layanans">
+
+        <section class="section bg-grey" id="layanans">
             <div class="container">
 
                 <div class="row">
@@ -46,7 +47,7 @@
                         <div class="text-center">
                             <h3>Layanan</h3>
                             <p class="text-muted slogan">
-                                <a class="btn btn-warning" href="{{url('layanan')}}"><i class="mdi mdi-table-edit mr-2"></i>Quisioner Kepuasan</a>
+                                <a class="btn btn-warning" href="{{url('kuesioner')}}"><i class="mdi mdi-table-edit mr-2"></i>Kuesioner Survei</a>
                                 <a class="btn btn-custom" href="{{url('layanan')}}">Lihat lebih banyak</a>
                             </p>
                             {{-- <p class="text-muted slogan">Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae. Vivamus eu sollicitudin lacus, nec ultricies lorem.</p> --}}
@@ -61,7 +62,7 @@
                             <img class="card-img-top img-fluid" style="max-height: 270px" src="{{ url('img/layanan/'.$l->foto)}}" alt="Card image cap">
                             <div class="card-body">
                                 <h5 class="card-title">{{$l->nama}}</h5>
-                                <p class="card-text">{{ $l->ket }}</p>
+                                <p class="card-text">{!! $l->ket !!}</p>
                                 <a href="{{ url('layanan?show='.$l->id)}}" class="btn btn-custom btn-sm waves-effect waves-light">Buka</a>
                             </div>
                         </div>
@@ -73,6 +74,64 @@
 
             </div>
         </section>
+
+        <section class="section" id="ikm">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="text-center">
+                            <h3>Indeks Kepuasan Masyarakat</h3>
+                            
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mt-5">
+                    <div class="col-lg-8 pb-3">
+                        <div class="card p-3 h-100">
+                            <div class="d-flex mb-3 mx-auto small justify-right">
+                                <span class="mt-1 mr-2">Filter: </span>
+                                <div class="">
+                                    <select class="form-control" id="tahun" style="font-size: 13px">
+                                        <option value="">Tahun</option>
+                                        @for($i = 0; $i < 4; $i++)
+                                        <option value="{{ date('Y')-$i }}">{{ date('Y')-$i }}</option>
+                                        @endfor    
+                                    </select>
+                                </div>
+                                <div class="pl-1">
+                             
+                                <select class="form-control" id="triwulan" style="font-size: 13px">
+                                    <option value="">Triwulan</option>
+                                    @for($i = 1; $i < 5; $i++)
+                                        <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor    
+                                </select>
+                                </div>
+                            </div>
+                            <canvas id="myChart" #chart></canvas>
+                            <div class=" mt-4 text-center" style="font-weight: 500; font-size: 13px" id="responden"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 pb-3">
+                        <div class="card p-3 h-100">
+                            <div class="mb-3 h5" style="font-weight: 500">Nilai Unsur Pelayanan</div>
+                            <table class="table">
+                                <tr class="bg-light" style="font-size: 13px">
+                                    <td class="py-1">Unsur</td>
+                                    <td class="py-1">IKM</td>
+                                    <td class="py-1">Kategori</td>
+                                    <td class="py-1">IKM Unit</td>
+                                </tr>
+                                <tbody id="tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
 
         <section class="section bg-grey" id="kegiatans">
             <div class="container">
@@ -216,5 +275,25 @@
             </div>
         </section>
         <!--END FORM-->
+
+        @if(session()->has('kue_success'))
+            <div class="alert fixed-bottom alert-success alert-dismissible mx-1 fade show mt-2" role="alert">
+                <h5 class="alert-heading">Berhasil</h5>
+            Respon Anda telah terkirim. <br>Terima kasih telah meluangkan waktu untuk mengisi kuesioner kepuasan masyarakat.<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+        @endif
+
+        @if(session()->has('kue_error'))
+            <div class="alert fixed-bottom alert-danger alert-dismissible mx-1 fade show mt-2" role="alert">
+                <h5 class="alert-heading">Gagal </h5>
+                Kuesioner <b>tidak</b>   terkirim..
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+        @endif
+        
 
 @endsection

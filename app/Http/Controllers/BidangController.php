@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bidang;
 use App\Http\Requests\StoreBidangRequest;
 use App\Http\Requests\UpdateBidangRequest;
+use App\Models\Aset;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -79,7 +80,9 @@ class BidangController extends Controller
     public function destroy(Bidang $bidang)
     {
         if(User::where('bidang_id', $bidang->id)->count())
-            return back()->with('error', 'Data ini terhubung dengan data lain..');
+            return back()->with('error', 'Data ini terhubung dengan data User..');
+        if(Aset::where('bidang_id', $bidang->id)->count())
+            return back()->with('error', 'Data ini terhubung dengan data Aset..');
         if(Bidang::destroy($bidang->id)){
             return back()->with('error', 'Data dihapus');
         }

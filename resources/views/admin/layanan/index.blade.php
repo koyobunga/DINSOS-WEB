@@ -8,9 +8,13 @@
 
         <div class="row">
             @foreach($data as $d)
-            <div class="col-lg-2 col-md-4">
+            <div class="col-lg-3 col-md-4">
                 <div class="card">
-                    <img class="card-img-top" src="{{ url('img/layanan/'.$d->foto)}}" alt="Card image cap">
+                    <div class="" style="height: 180px; background-image: url({{ url('img/layanan/'.$d->foto)}}); 
+                    background-position: center top;
+                    background-size: 250px;
+    background-repeat: no-repeat;">&nbsp;</div>
+                    {{-- <img class="card-img-top" src="" alt="Card image cap"> --}}
                     <div class="card-body">
                         <h5 class="card-title">{{ $d->nama }}</h5>
                         <p class="card-text">{!! $d->ket!!}</p>

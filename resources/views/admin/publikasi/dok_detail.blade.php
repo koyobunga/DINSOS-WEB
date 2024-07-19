@@ -43,7 +43,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($publikasi->dokumen_det->sortDesc() as $d)
+                    {{-- @if($publikasi->dokumen_det) --}}
+                    @foreach($publikasi->publikasi_det->sortDesc() as $d)
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td class="w-100">
@@ -61,6 +62,7 @@
                     </tr>
 
                     @endforeach
+                    {{-- @endif --}}
                 </tbody>
             </table>
         </div>

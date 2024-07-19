@@ -8,7 +8,7 @@
 
         <div class="card">
             <div class="card-body" style="font-size: 12px">
-                <table id="tabel_berita" class="table table-striped my-3 table-centered dt-responsive  table-vertical" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                <table id="tabel_berita" class="table table-striped my-3 table-centered dt-responsive  table-vertical" style="border-collapse: collapse; border-spacing: 0; width: 100%; font-size: 14px">
                     <thead>
                     <tr style="font-size: 13px">
                         <th>#</th>
