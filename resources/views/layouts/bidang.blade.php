@@ -126,7 +126,7 @@
                         <div class="dropdown d-inline-block">
                             <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <img class="rounded-circle header-profile-user" src="{{url('assets/admin/images/users/avatar-1.jpg')}}" alt="Header Avatar">
-                            </button>
+                            </button> 
                             <div class="dropdown-menu dropdown-menu-right">
                                 <!-- item-->
                                 {{-- <a class="dropdown-item" data-toggle="modal" data-target="#passModal" href="#"><i class="bx bx-user font-size-16 align-middle mr-1"></i> Ubah Password</a> --}}
